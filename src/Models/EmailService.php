@@ -6,6 +6,7 @@ namespace Sendportal\Base\Models;
 
 use Carbon\Carbon;
 use Database\Factories\EmailServiceFactory;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -74,14 +75,6 @@ class EmailService extends BaseModel
         return $this->hasMany(Campaign::class, 'email_service_id');
     }
 
-    /**
-     * Automations using this email service.
-     */
-    public function automations(): HasMany
-    {
-        return $this->hasMany(Automation::class, 'email_service_id');
-    }
-
     public function setSettingsAttribute(array $data): void
     {
         $this->attributes['settings'] = encrypt(json_encode($data));
@@ -92,12 +85,10 @@ class EmailService extends BaseModel
         return json_decode(decrypt($value), true);
     }
 
-    public function getInUseAttribute(): bool
+    public function inUse(): Attribute
     {
-        if (Helper::isPro()) {
-            return (bool)$this->campaigns()->count() + $this->automations()->count();
-        }
-
-        return (bool)$this->campaigns()->count();
+        return Attribute::get(
+            fn() => $this->campaigns()->exists()
+        )->shouldCache();
     }
 }
