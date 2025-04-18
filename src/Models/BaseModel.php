@@ -6,6 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class BaseModel extends Model
 {
+    public function getConnection()
+    {
+        return config('sendportal.database.connection');
+    }
+
     /**
      * Store which fields are boolean in the model
      *
