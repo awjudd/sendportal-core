@@ -68,7 +68,7 @@ class SubscribersController extends Controller
      */
     public function store(SubscriberRequest $request): RedirectResponse
     {
-        $data = $request->all();
+        $data = $request->validated();
         $data['unsubscribed_at'] = $request->has('subscribed') ? null : now();
         $data['unsubscribe_event_id'] = $request->has('subscribed') ? null : UnsubscribeEventType::MANUAL_BY_ADMIN;
 

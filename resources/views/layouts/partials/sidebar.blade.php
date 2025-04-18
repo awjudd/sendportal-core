@@ -27,6 +27,11 @@
                 <i class="fa-fw fas fa-user mr-2"></i><span>{{ __('Subscribers') }}</span>
             </a>
         </li>
+        <li class="nav-item {{ request()->is('*tags*') ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('sendportal.tags.index') }}">
+                <i class="fa-fw fas fa-tag mr-2"></i><span>{{ __('Tags') }}</span>
+            </a>
+        </li>
         <li class="nav-item {{ request()->is('*messages*') ? 'active' : '' }}">
             <a class="nav-link" href="{{ route('sendportal.messages.index') }}">
                 <i class="fa-fw fas fa-paper-plane mr-2"></i><span>{{ __('Messages') }}</span>
