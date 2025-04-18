@@ -24,6 +24,6 @@ class Helper
 
     public function isPro(): bool
     {
-        return true;
+        return class_exists(\Sendportal\Pro\SendportalProServiceProvider::class);
     }
 }
