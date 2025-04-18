@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class BaseModel extends Model
 {
-    public function getConnection()
+    public function getConnectionName()
     {
         return config('sendportal.database.connection');
     }
