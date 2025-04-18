@@ -17,7 +17,8 @@ class EmailServiceTenantRepository extends BaseTenantRepository
      */
     public function getEmailServiceTypes()
     {
-        return EmailServiceType::orderBy('name')->get();
+        return EmailServiceType::orderBy('name')
+            ->get();
     }
 
     /**
