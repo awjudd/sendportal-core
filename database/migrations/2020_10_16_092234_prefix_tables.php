@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\Schema;
 
-class PrefixTables extends Migration
+class PrefixTables extends \Sendportal\Base\SendPortalMigration
 {
     /**
      * Run the migrations.
