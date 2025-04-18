@@ -40,6 +40,13 @@ abstract class BaseTenantRepository implements BaseTenantInterface
      */
     private $orderDirection = 'asc';
 
+    protected string $connectionName;
+
+    public function __construct()
+    {
+        $this->connectionName = config('sendportal.database.connection');
+    }
+
     /**
      * Return all records
      *

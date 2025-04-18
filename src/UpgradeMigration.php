@@ -6,7 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\Schema;
 use RuntimeException;
 
-class UpgradeMigration extends Migration
+class UpgradeMigration extends SendPortalMigration
 {
     protected function getTableName(string $baseName): string
     {

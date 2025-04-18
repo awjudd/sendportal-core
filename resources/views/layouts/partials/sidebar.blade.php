@@ -10,7 +10,7 @@
                 <i class="fa-fw fas fa-envelope mr-2"></i><span>{{ __('Campaigns') }}</span>
             </a>
         </li>
-        @if (\Sendportal\Base\Facades\Helper::isPro())
+        @if (\Sendportal\Base\Facades\Helper::isPro() && Route::has('sendportal.automations.index'))
         <li class="nav-item {{ request()->is('*automations*') ? 'active' : '' }}">
             <a class="nav-link" href="{{ route('sendportal.automations.index') }}">
                 <i class="fa-fw fas fa-sync-alt mr-2"></i><span>{{ __('Automations') }}</span>
@@ -25,6 +25,11 @@
         <li class="nav-item {{ request()->is('*subscribers*') ? 'active' : '' }}">
             <a class="nav-link" href="{{ route('sendportal.subscribers.index') }}">
                 <i class="fa-fw fas fa-user mr-2"></i><span>{{ __('Subscribers') }}</span>
+            </a>
+        </li>
+        <li class="nav-item {{ request()->is('*tags*') ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('sendportal.tags.index') }}">
+                <i class="fa-fw fas fa-tag mr-2"></i><span>{{ __('Tags') }}</span>
             </a>
         </li>
         <li class="nav-item {{ request()->is('*messages*') ? 'active' : '' }}">

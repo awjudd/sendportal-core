@@ -30,6 +30,8 @@ class EmailServicesController extends Controller
     {
         $emailServices = $this->emailServices->all(Sendportal::currentWorkspaceId());
 
+        $emailServices->load('type');
+
         return view('sendportal::email_services.index', compact('emailServices'));
     }
 

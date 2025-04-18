@@ -43,7 +43,7 @@ class TagsController extends Controller
      */
     public function store(TagStoreRequest $request): RedirectResponse
     {
-        $this->tagRepository->store(Sendportal::currentWorkspaceId(), $request->all());
+        $this->tagRepository->store(Sendportal::currentWorkspaceId(), $request->validated());
 
         return redirect()->route('sendportal.tags.index');
     }
@@ -63,7 +63,7 @@ class TagsController extends Controller
      */
     public function update(int $id, TagUpdateRequest $request): RedirectResponse
     {
-        $this->tagRepository->update(Sendportal::currentWorkspaceId(), $id, $request->all());
+        $this->tagRepository->update(Sendportal::currentWorkspaceId(), $id, $request->validated());
 
         return redirect()->route('sendportal.tags.index');
     }
