@@ -6,6 +6,7 @@ namespace Sendportal\Base\Models;
 
 use Carbon\Carbon;
 use Database\Factories\TemplateFactory;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -47,8 +48,10 @@ class Template extends BaseModel
         return $this->hasMany(Campaign::class);
     }
 
-    public function isInUse(): bool
+    public function isInUse(): Attribute
     {
-        return $this->campaigns()->count() > 0;
+        return Attribute::get(
+            fn()=> $this->campaigns()->count() > 0
+        )->shouldCache();
     }
 }
