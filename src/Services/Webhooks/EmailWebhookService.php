@@ -18,9 +18,17 @@ use Sendportal\Pro\Models\AutomationSchedule;
 
 class EmailWebhookService
 {
+    private string $connectionName;
+
+    public function __construct()
+    {
+        $this->connectionName = config('sendportal.database.connection');
+    }
+
     public function handleDelivery(string $messageId, Carbon $timestamp): void
     {
-        DB::table('sendportal_messages')->where('message_id', $messageId)->whereNull('delivered_at')->update([
+        DB::connection($this->connectionName)
+            ->table('sendportal_messages')->where('message_id', $messageId)->whereNull('delivered_at')->update([
             'delivered_at' => $timestamp
         ]);
     }
@@ -48,7 +56,8 @@ class EmailWebhookService
         // @todo not sure that this give much value? We can just derive the count from the messages table.
         if ($message->isAutomation()) {
             $automationStep = $this->resolveAutomationStepFromMessage($message);
-            DB::table('sendportal_automation_steps')->where('id', $automationStep->id)->increment('open_count');
+            DB::connection($this->connectionName)
+                ->table('sendportal_automation_steps')->where('id', $automationStep->id)->increment('open_count');
         }
     }
 
@@ -86,7 +95,8 @@ class EmailWebhookService
         // @todo not sure that this give much value? We can just derive the count/ from the messages table.
         if ($message->isAutomation()) {
             $automationStep = $this->resolveAutomationStepFromMessage($message);
-            DB::table('sendportal_automation_steps')->where('id', $automationStep->id)->increment('click_count');
+            DB::connection($this->connectionName)
+                ->table('sendportal_automation_steps')->where('id', $automationStep->id)->increment('click_count');
         }
 
         $messageUrlHash = $this->generateMessageUrlHash($message, $url);
@@ -163,13 +173,15 @@ class EmailWebhookService
      */
     protected function unsubscribe(string $messageId, int $typeId): void
     {
-        $subscriberId = DB::table('sendportal_messages')->where('message_id', $messageId)->value('subscriber_id');
+        $subscriberId = DB::connection($this->connectionName)
+            ->table('sendportal_messages')->where('message_id', $messageId)->value('subscriber_id');
 
         if (! $subscriberId) {
             return;
         }
 
-        DB::table('sendportal_subscribers')->where('id', $subscriberId)->update([
+        DB::connection($this->connectionName)
+            ->table('sendportal_subscribers')->where('id', $subscriberId)->update([
             'unsubscribed_at' => now(),
             'unsubscribe_event_id' => $typeId,
             'updated_at' => now()
@@ -188,13 +200,15 @@ class EmailWebhookService
             throw new RuntimeException('Unable to resolve source for message id=' . $message->id);
         }
 
-        $automationSchedule = DB::table('sendportal_automation_schedules')->where('id', $message->source_id)->first();
+        $automationSchedule = DB::connection($this->connectionName)
+            ->table('sendportal_automation_schedules')->where('id', $message->source_id)->first();
 
         if (! $automationSchedule) {
             throw new RuntimeException('Unable to find schedule matching message source id=' . $message->source_id);
         }
 
-        return DB::table('sendportal_automation_steps')->where('id', $automationSchedule->automation_step_id)->first();
+        return DB::connection($this->connectionName)
+            ->table('sendportal_automation_steps')->where('id', $automationSchedule->automation_step_id)->first();
     }
 
     protected function generateMessageUrlHash(Message $message, string $url): string

@@ -37,7 +37,8 @@ abstract class BaseCampaignTenantRepository extends BaseTenantRepository impleme
      */
     public function getCounts(Collection $campaignIds, int $workspaceId): array
     {
-        $counts = DB::table('sendportal_campaigns')
+        $counts = DB::connection($this->connectionName)
+            ->table('sendportal_campaigns')
             ->leftJoin('sendportal_messages', function ($join) use ($campaignIds, $workspaceId) {
                 $join->on('sendportal_messages.source_id', '=', 'sendportal_campaigns.id')
                     ->where('sendportal_messages.source_type', Campaign::class)
