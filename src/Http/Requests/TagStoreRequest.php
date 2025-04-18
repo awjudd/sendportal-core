@@ -7,6 +7,7 @@ namespace Sendportal\Base\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Sendportal\Base\Facades\Sendportal;
+use Sendportal\Base\Models\Tag;
 
 class TagStoreRequest extends FormRequest
 {
@@ -16,7 +17,7 @@ class TagStoreRequest extends FormRequest
             'name' => [
                 'required',
                 'max:255',
-                Rule::unique('sendportal_tags')
+                Rule::unique(Tag::class)
                     ->where('workspace_id', Sendportal::currentWorkspaceId()),
             ],
         ];
