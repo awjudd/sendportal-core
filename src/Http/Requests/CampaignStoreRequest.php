@@ -6,6 +6,8 @@ namespace Sendportal\Base\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Sendportal\Base\Models\EmailService;
+use Sendportal\Base\Models\Template;
 
 class CampaignStoreRequest extends FormRequest
 {
@@ -40,11 +42,11 @@ class CampaignStoreRequest extends FormRequest
             'email_service_id' => [
                 'required',
                 'integer',
-                'exists:sendportal_email_services,id',
+                Rule::exists(EmailService::class, 'id')
             ],
             'template_id' => [
                 'nullable',
-                'exists:sendportal_templates,id',
+                Rule::exists(Template::class, 'id')
             ],
             'content' => [
                 Rule::requiredIf($this->template_id === null),
